@@ -29,12 +29,7 @@ public class ScoreService {
             throw new RuntimeException("Player not found");
         }
         Score savedScore = scoreRepository.save(score);
-        playerService.updatePlayerStats(
-                savedScore.getPlayerId(),
-                savedScore.getValue(),
-                savedScore.getCoinsCollected(),
-                savedScore.getDistanceTravelled()
-        );
+        playerService.updatePlayerStats(savedScore.getPlayerId(), savedScore.getValue(), savedScore.getCoinsCollected(), savedScore.getDistanceTravelled());
         return savedScore;
     }
 
@@ -95,15 +90,30 @@ public class ScoreService {
     }
 
     public Score updateScore(UUID scoreId,  Score updatedScore){
-        Optional<Score> score = scoreRepository.findById(scoreId);
-            score.orElseThrow() -> new RuntimeException(...))
+        Score existingScore = scoreRepository.findById(scoreId)
+                .orElseThrow(() -> new RuntimeException("Score tidak ditemukan dari ID: " + scoreId));
+        if (updatedScore.getValue() != null) {
+            existingScore.setValue(updatedScore.getValue());
+        }
+        if (updatedScore.getCoinsCollected() != null) {
+            existingScore.setCoinsCollected(updatedScore.getCoinsCollected());
+        }
+        if (updatedScore.getDistanceTravelled() != null) {
+            existingScore.setDistanceTravelled(updatedScore.getDistanceTravelled());
+        }
+        return scoreRepository.save(existingScore);
     }
 
-    public Score deleteScore(UUID scoreId){
-
+    public void deleteScore(UUID scoreId){
+        if (scoreRepository.existsById(scoreId)) {
+            scoreRepository.deleteById(scoreId);
+        } else {
+            throw new RuntimeException("Score not found with id: " + scoreId);
+        }
     }
 
-    public Score deleteScoresByPlayerId(UUID playerId){
-
+    public void deleteScoresByPlayerId(UUID playerId){
+        List<Score> scores = scoreRepository.findByPlayerId(playerId);
+        scoreRepository.deleteAll(scores);
     }
 }
