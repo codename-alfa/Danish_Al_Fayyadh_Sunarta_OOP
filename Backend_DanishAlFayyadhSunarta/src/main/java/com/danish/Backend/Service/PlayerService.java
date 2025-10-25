@@ -96,7 +96,7 @@ public class PlayerService {
     }
 
     public List<Player> getLeaderboardByTotalDistance() {
-        return playerRepository.findAllByOrderByTotalDistanceTravelledDesc();
+        return playerRepository.findAllByOrderByTotalDistanceDesc();
     }
 
     public boolean isUsernameExists(String username) {

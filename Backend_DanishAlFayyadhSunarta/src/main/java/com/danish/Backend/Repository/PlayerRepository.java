@@ -25,5 +25,4 @@ public interface PlayerRepository extends JpaRepository<Player, UUID> {
 
     List<Player> findTopPlayersByHighScore(int limit);
 
-    List<Player> findAllByOrderByTotalDistanceTravelledDesc();
 }
