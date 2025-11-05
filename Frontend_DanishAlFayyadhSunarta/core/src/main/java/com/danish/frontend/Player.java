@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.danish.frontend.Ground;
 
 public class Player{
-
     private Vector2 position;
     private Vector2 velocity;
     private float gravity = 2000f;
@@ -55,46 +54,36 @@ public class Player{
             velocity.y = -maxVerticalSpeed;
         }
     }
-
     private void fly(float delta){
         velocity.y += force*delta;
     }
-
     private void updateCollider(){
         collider.setPosition(position.x, position.y);
     }
-
     public void checkBoundaries(Ground ground, float ceilingY){
         if (ground.isColliding(collider)){
-            velocity.y = 0;
             position.y = ground.getTopY();
         }
         if (position.y + height > ceilingY){
             position.y = ceilingY - height;
         }
     }
-
     public void renderShape(ShapeRenderer shapeRenderer){
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.rect(position.x, position.y, width, height);
     }
-
     public Vector2 getPosition(){
         return position;
     }
-
     public float getWidth(){
         return width;
     }
-
     public float getHeight(){
         return height;
     }
-
     public Rectangle getCollider(){
         return collider;
     }
-
     public float getDistanceTraveled(){
         return distanceTraveled/10f;
     }

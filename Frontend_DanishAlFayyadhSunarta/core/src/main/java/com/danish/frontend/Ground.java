@@ -10,20 +10,16 @@ public class Ground{
     public Ground(){
         this.collider = new Rectangle(0, 0, 2*Gdx.graphics.getWidth(), GROUND_HEIGHT);
     }
-
     public void update(float cameraX){
         collider.x = cameraX - Gdx.graphics.getWidth() / 2f - 500;
         collider.setPosition(collider.x, 0);
     }
-
     public boolean  isColliding(Rectangle playerCollider){
         return collider.overlaps(playerCollider);
     }
-
     public float getTopY(){
         return GROUND_HEIGHT;
     }
-
     public void renderShape(ShapeRenderer shapeRenderer){
         shapeRenderer.setColor(0.5f, 0.5f, 0.5f, 1f);
         shapeRenderer.rect(collider.x, collider.y, collider.width, collider.height);

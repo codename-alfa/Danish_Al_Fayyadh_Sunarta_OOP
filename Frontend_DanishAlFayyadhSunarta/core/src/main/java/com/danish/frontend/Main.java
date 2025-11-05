@@ -23,7 +23,7 @@ public class Main extends ApplicationAdapter{
         gameManager = GameManager.getInstance();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        player = new Player(new Vector2(100, Gdx.graphics.getHeight() / 2f));
+        player = new Player(new Vector2(100, Gdx.graphics.getHeight()/2f));
         ground = new Ground();
         gameManager.startGame();
     }
@@ -40,14 +40,11 @@ public class Main extends ApplicationAdapter{
     }
     private void update(float delta){
         boolean isFlying = Gdx.input.isKeyPressed(Input.Keys.SPACE);
-
         player.update(delta, isFlying);
         updateCamera(delta);
         ground.update(camera.position.x);
-
         float ceilingY = camera.position.y + Gdx.graphics.getHeight()/2f;
         player.checkBoundaries(ground, ceilingY);
-
         int currentDistance = (int) player.getDistanceTraveled();
         if (currentDistance > gameManager.getScore()){
             gameManager.setScore(currentDistance);

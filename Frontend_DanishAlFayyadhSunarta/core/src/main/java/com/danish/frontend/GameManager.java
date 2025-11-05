@@ -1,7 +1,6 @@
 package com.danish.frontend;
 
 public class GameManager{
-
     private static GameManager instance;
     private int score;
     private boolean gameActive;
@@ -22,13 +21,13 @@ public class GameManager{
         System.out.println("Game Started!");
     }
 
-    public void setScore(int newScore) {
+    public void setScore(int newScore){
         if (gameActive) {
             this.score = newScore;
         }
     }
 
-    public int getScore() {
+    public int getScore(){
         return score;
     }
 }
