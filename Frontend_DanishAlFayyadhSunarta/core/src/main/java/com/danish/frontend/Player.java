@@ -17,32 +17,35 @@ public class Player{
     private float height = 64f;
     private float baseSpeed = 300f;
     private float distanceTraveled = 0f;
+    private boolean isDead;
+    private Vector2 startPosition;
 
     public Player(Vector2 startPosition){
-        this.position = startPosition;
+        this.startPosition = new Vector2(startPosition);
+        this.position = new Vector2(startPosition);
         this.velocity = new Vector2(baseSpeed, 0);
         this.collider = new Rectangle(position.x, position.y, width, height);
+        this.isDead = false;
     }
-
     public void update(float delta, boolean isFlying){
+        if(isDead == true){
+            return;
+        }
         updateDistanceAndSpeed(delta);
         updatePosition(delta);
         applyGravity(delta);
-        if (isFlying) {
+        if(isFlying){
             fly(delta);
         }
         updateCollider();
     }
-
     private void updateDistanceAndSpeed(float delta){
         distanceTraveled += velocity.x*delta;
     }
-
     private void updatePosition(float delta){
         position.x += velocity.x*delta;
         position.y += velocity.y*delta;
     }
-
     private void applyGravity(float delta){
         velocity.y -= gravity*delta;
         velocity.x = baseSpeed;
@@ -61,16 +64,31 @@ public class Player{
         collider.setPosition(position.x, position.y);
     }
     public void checkBoundaries(Ground ground, float ceilingY){
-        if (ground.isColliding(collider)){
+        if(ground.isColliding(collider)){
             position.y = ground.getTopY();
+            velocity.y = 0;
         }
-        if (position.y + height > ceilingY){
+        if(position.y + height > ceilingY){
             position.y = ceilingY - height;
+            velocity.y = 0;
         }
     }
     public void renderShape(ShapeRenderer shapeRenderer){
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.rect(position.x, position.y, width, height);
+    }
+    public void die(){
+        isDead = true;
+        velocity.set(0, 0);
+    }
+    public void reset(){
+        isDead = false;
+        position.set(startPosition);
+        velocity.set(baseSpeed, 0);
+        distanceTraveled = 0f;
+    }
+    public boolean isDead(){
+        return isDead;
     }
     public Vector2 getPosition(){
         return position;
