@@ -102,8 +102,7 @@ public class Main extends Game{
 
         if(currentScoreMeters > previousScoreMeters){
             if (currentScoreMeters != lastLoggedScore) {
-                System.out.println("Distance: " + currentScoreMeters +
-                    "m");
+                System.out.println("Distance: " + currentScoreMeters + "m");
                 lastLoggedScore = currentScoreMeters;
             }
             gameManager.setScore(currentScoreMeters);

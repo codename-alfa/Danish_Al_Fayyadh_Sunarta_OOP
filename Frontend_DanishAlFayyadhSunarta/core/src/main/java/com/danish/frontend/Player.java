@@ -57,7 +57,7 @@ public class Player{
             velocity.y = -maxVerticalSpeed;
         }
     }
-    private void fly(float delta){
+    public void fly(float delta){
         velocity.y += force*delta;
     }
     private void updateCollider(){
