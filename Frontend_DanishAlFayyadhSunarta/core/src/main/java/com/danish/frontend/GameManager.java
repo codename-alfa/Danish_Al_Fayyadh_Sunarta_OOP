@@ -1,14 +1,15 @@
 package com.danish.frontend;
 
 import com.danish.frontend.observers.Observer;
+import com.danish.frontend.observers.ScoreManager;
 
 public class GameManager{
     private static GameManager instance;
-    private int scoreManager;
+    private ScoreManager scoreManager;
     private boolean gameActive;
 
     private GameManager(){
-        scoreManager = 0;
+        scoreManager = new ScoreManager();
         gameActive = false;
     }
     public static GameManager getInstance(){
@@ -18,24 +19,24 @@ public class GameManager{
         return instance;
     }
     public void startGame(){
-        scoreManager = 0;
+        scoreManager.setScore(0);
         gameActive = true;
         System.out.println("Game Started!");
     }
 
     public void setScore(int newScore){
         if (gameActive) {
-            this.scoreManager = newScore;
+            scoreManager.setScore(newScore);
         }
     }
 
     public int getScore(){
-        return scoreManager;
+        return scoreManager.getScore();
     }
     public void addObserver(Observer observer){
-        scoreManager.addObserver();
+        scoreManager.addObserver(observer);
     }
-    public void  removeObserver{
-
+    public void removeObserver(Observer observer){
+        scoreManager.removeObserver(observer);
     }
 }

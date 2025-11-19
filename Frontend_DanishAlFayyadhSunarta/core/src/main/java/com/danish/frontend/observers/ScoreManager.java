@@ -11,24 +11,20 @@ public class ScoreManager implements Subject{
         this.observers = new ArrayList<>();
         this.score = 0;
     }
-
     @Override
     public void addObserver(Observer observer){
         observers.add(observer);
     }
-
     @Override
     public void removeObserver(Observer observer) {
         observers.remove(observer);
     }
-
     @Override
     public void notifyObservers(int score) {
-        for(observer : observers){
-            update(score);
+        for(Observer observer : observers){
+            observer.update(score);
         }
     }
-
     public void setScore(int newScore){
         if(newScore != score){
             score = newScore;

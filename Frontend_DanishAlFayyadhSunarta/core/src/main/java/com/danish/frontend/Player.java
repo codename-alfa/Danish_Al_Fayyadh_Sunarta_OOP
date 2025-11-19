@@ -1,5 +1,6 @@
 package com.danish.frontend;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
@@ -35,7 +36,7 @@ public class Player{
         updatePosition(delta);
         applyGravity(delta);
         if(isFlying){
-            fly(delta);
+            fly();
         }
         updateCollider();
     }
@@ -57,8 +58,8 @@ public class Player{
             velocity.y = -maxVerticalSpeed;
         }
     }
-    public void fly(float delta){
-        velocity.y += force*delta;
+    public void fly(){
+        velocity.y += force* Gdx.graphics.getDeltaTime();
     }
     private void updateCollider(){
         collider.setPosition(position.x, position.y);
