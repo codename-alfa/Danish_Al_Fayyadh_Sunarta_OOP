@@ -25,8 +25,10 @@ public class GameOverState implements GameState{
     public void render(SpriteBatch batch) {
         float width = Gdx.graphics.getWidth();
         float height = Gdx.graphics.getHeight();
+        batch.begin();
         font.draw(batch, "GAME OVER", width / 2f, (height / 2f) + 15f);
         font.draw(batch, "Press SPACE to restart", width / 2f, (height / 2f) - 15f);
+        batch.end();
     }
 
     @Override

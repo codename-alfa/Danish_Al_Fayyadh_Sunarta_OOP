@@ -1,5 +1,7 @@
 package com.danish.frontend.states;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+
 import java.util.Stack;
 
 public class GameStateManager{
@@ -11,7 +13,7 @@ public class GameStateManager{
         states.push(state);
     }
     public void pop(){
-
+        states.pop().dispose();
     }
     public void set(GameState state){
         pop();
@@ -19,5 +21,8 @@ public class GameStateManager{
     }
     public void update(float delta){
         states.peek().update(delta);
+    }
+    public void render(SpriteBatch batch) {
+        states.peek().render(batch);
     }
 }
