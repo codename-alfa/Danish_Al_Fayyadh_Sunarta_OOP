@@ -1,4 +1,5 @@
 package com.danish.frontend;
 
-public interface Command {
+public interface Command{
+    void execute();
 }

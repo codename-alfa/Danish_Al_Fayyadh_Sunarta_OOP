@@ -1,4 +1,8 @@
 package com.danish.frontend;
 
-public class ScoreDisplay {
+public class ScoreDisplay implements ScoreObserver{
+    @Override
+    public void onScoreUpdate(int newScore){
+        System.out.println("Score : " + newScore);
+    }
 }

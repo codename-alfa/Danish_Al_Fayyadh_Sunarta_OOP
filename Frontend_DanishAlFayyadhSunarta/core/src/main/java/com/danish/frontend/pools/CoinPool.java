@@ -8,16 +8,14 @@ public class CoinPool extends ObjectPool<Coin>{
     protected Coin createObject() {
         return new Coin(new Vector2(0,0));
     }
-
     @Override
-    protected void resetObject(Coin object) {
-        Coin.setActive(false);
+    protected void resetObject(Coin coin) {
+        coin.setActive(false);
     }
-
-    public  obtain(float x, float y){
-        Object coin;
-        super.obtain();
-
-        return ;
+    public Coin obtain(float x, float y){
+        Coin coin = super.obtain();
+        coin.setPosition(x, y);
+        coin.setActive(true);
+        return coin;
     }
 }

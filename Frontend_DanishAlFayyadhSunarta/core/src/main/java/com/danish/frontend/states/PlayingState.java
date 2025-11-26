@@ -9,12 +9,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.danish.frontend.Background;
-import com.danish.frontend.GameManager;
-import com.danish.frontend.Ground;
-import com.danish.frontend.Player;
+import com.danish.frontend.*;
 import com.danish.frontend.commands.Command;
 import com.danish.frontend.commands.JetpackCommand;
+import com.danish.frontend.factories.CoinFactory;
 import com.danish.frontend.factories.ObstacleFactory;
 import com.danish.frontend.observers.ScoreUIObserver;
 import com.danish.frontend.obstacles.BaseObstacle;
@@ -57,7 +55,8 @@ public class PlayingState implements GameState {
 
 
     private DifficultyStrategy difficultyStrategy;
-
+    private final CoinFactory coinFactory;
+    private float coinSpawnTimer = 0f;
 
     public PlayingState(GameStateManager gsm) {
         this.gsm = gsm;
@@ -90,6 +89,7 @@ public class PlayingState implements GameState {
 
 
         GameManager.getInstance().startGame();
+        this.coinFactory = new CoinFactory();
     }
 
 
@@ -108,6 +108,7 @@ public class PlayingState implements GameState {
 
 
         if (player.isDead()) {
+            GameManager.getInstance().endGame();
             gsm.set(new GameOverState(gsm));
             return;
         }
@@ -122,7 +123,8 @@ public class PlayingState implements GameState {
 
         updateObstacles(delta);
         checkCollisions();
-
+        updateCoins(delta);
+        checkCoinCollisions();
 
         int currentScoreMeters = (int) player.getDistanceTraveled();
         GameManager.getInstance().setScore(currentScoreMeters);
@@ -164,13 +166,16 @@ public class PlayingState implements GameState {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         player.renderShape(shapeRenderer);
         shapeRenderer.setColor(Color.RED);
-        for (BaseObstacle obstacle : obstacleFactory.getAllInUseObstacles()) {
+        for(BaseObstacle obstacle : obstacleFactory.getAllInUseObstacles()) {
             obstacle.render(shapeRenderer);
+        }
+        for(Coin coin : coinFactory.getActiveCoins()){
+            coin.renderShape(shapeRenderer);
         }
         shapeRenderer.end();
 
 
-        scoreUIObserver.render(GameManager.getInstance().getScore());
+        scoreUIObserver.render(GameManager.getInstance().getScore(), GameManager.getInstance().getCoins());
     }
 
 
@@ -235,6 +240,31 @@ public class PlayingState implements GameState {
         }
     }
 
+    private void checkCoinCollisions(){
+        Rectangle playerCollider = player.getCollider();
+        for (Coin coin : coinFactory.getActiveCoins()) {
+            if(coin.isColliding(playerCollider)){
+                coin.setActive(false);
+                GameManager.getInstance().addCoin();
+            }
+        }
+    }
+
+    private void updateCoins(float delta){
+        coinSpawnTimer += delta;
+        if(coinSpawnTimer > 0.5f){
+            float spawnX = camera.position.x + (Gdx.graphics.getWidth() / 2f);
+            coinFactory.createCoinPattern(spawnX, ground.getTopY());
+            coinSpawnTimer = 0;
+        }
+        float cameraLeft = camera.position.x - (Gdx.graphics.getWidth() / 2f);
+        for(Coin coin : coinFactory.getActiveCoins()){
+            coin.update(delta);
+            if(coin.getPosition().x + 20 < cameraLeft){
+                coinFactory.releaseCoin(coin);
+            }
+        }
+    }
 
     @Override
     public void dispose() {
@@ -245,6 +275,7 @@ public class PlayingState implements GameState {
         obstacleFactory.releaseAllObstacles();
         scoreUIObserver.dispose();
         background.dispose();
+        coinFactory.releaseAll();
     }
 }
 

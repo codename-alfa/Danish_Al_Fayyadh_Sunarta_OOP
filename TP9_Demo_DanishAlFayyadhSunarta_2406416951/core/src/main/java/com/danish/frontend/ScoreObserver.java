@@ -1,4 +1,5 @@
 package com.danish.frontend;
 
-public interface ScoreObserver {
+public interface ScoreObserver{
+    void onScoreUpdate(int newScore);
 }
